@@ -72,6 +72,33 @@ Different indices:
   3. **wazuh-monitoring** - Stores data related to the Wazuh agent status over time.
   4. **wazuh-statistics** - Stores data related to the Wazuh server performance. It is used by the web interface to represent the performance statistics.
 
-  
+## Wazuh Architecture
+
+The Wazuh architecture is based on agents, running on the monitored endpoints, that forward security data to a central server.
+
+![Wazuh Architecture](https://github.com/user-attachments/assets/c16c11d0-ad14-497d-98bd-01aebd5a0c4d)
+<p align = 'center'><b>Figure 4: Wazuh Deployment Architecture</b>
+
+Agentless devices such as firewalls, switches, routers, and access points are supported and can actively submit log data via Syslog, SSH, or using their API. The central server decodes and analyzes the incoming information and passes the results along to the Wazuh indexer for indexing and storage.
+
+The Wazuh indexer cluster is a collection of one or more nodes that communicate with each other to perform read and write operations on indices. Small Wazuh deployments, which do not require processing large amounts of data, can easily be handled by a single-node cluster.
+
+Multi-node clusters are recommended when there are many monitored endpoints, when a large volume of data is anticipated, or when high availability is required.
+
+### a. Wazuh Agent - Wazuh Server Communication
+
+The Wazuh agent continuously sends events to the Wazuh server for analysis and threat detection. To start shipping this data, the agent establishes a connection with the server service for agent connection.
+
+The Wazuh server then decodes and rule-checks the received events, utilizing the analysis engine. Events that trip a rule are augmented with alert data such as rule ID and rule name.
+
+### b. Wazuh Server - Wazuh Indexer Communication
+
+The Wazuh server uses Filebeat to securely transmit alert and event data to the Wazuh indexer via TLS encryption. Filebeat monitors output data from the Wazuh server and forwards it to the Wazuh indexer. Once indexed, you can analyze and visualize the data through the Wazuh dashboard.
+
+The Wazuh dashboard queries the Wazuh RESTful API to display configuration and status-related information of the Wazuh server and agents.
+
+## Wazuh Installation
+
+
 
 
